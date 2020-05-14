@@ -1,0 +1,114 @@
+#!/bin/bash
+
+set -o errexit          # Exit on most errors (see the manual)
+set -o errtrace         # Make sure any error trap is inherited
+set -o nounset          # Disallow expansion of unset variables
+set -o pipefail         # Use last non-zero exit code in a pipeline
+source shell_utils
+
+# Usage help
+script_usage() {
+    cat << EOF
+Usage:
+     -h|--help                 Displays this help
+     -d|--dist   <node-name>   Get distance from current node to <node-name>
+     -r|--run    <node-name>   Run Bellman Ford from <node-name>
+     -l|--log    <node-name>   log mtr result one <node-name>
+EOF
+}
+
+create_log() {
+    if [[ $# -gt 1 ]]; then
+        echo "Invalid number of parameters"
+        script_usage
+        exit 0
+    else
+        case ${1:-b-ford} in
+            "b-ford")
+                echo "Already in the root"
+                ;;
+            "cerf")
+                mtr 10.10.1.1 --report --no-dns
+                ;;
+            "knuth")
+                mtr 10.10.8.2 --report --no-dns
+                ;;
+            "lovelace")
+                mtr 10.10.4.1 --report --no-dns
+                ;;
+            "hopper")
+                mtr 10.10.3.1 --report --no-dns
+                ;;
+            "baran")
+                mtr 10.10.5.2 --report --no-dns
+                ;;
+        esac
+    fi
+}
+
+# Run bellman ford
+run_bellman_ford() {
+    if [[ $# -gt 1 ]]; then
+        echo "Invalid number of parameters"
+        script_usage
+        exit 0
+    else
+        echo "in run_bellman_ford"
+        ./bellman_ford "$@"
+    fi
+}
+
+# Get distance from given ssh shell and store it as a glob variable
+get_distance() {
+    ## TODO:
+    ### Run a subshell and get distance
+
+    if [[ $# -gt 1 ]]; then
+        echo "Invalid number of parameters"
+        script_usage
+        exit 0
+    else
+        echo "in get_distance"
+    fi
+}
+
+# Parameter parser
+parse_params() {
+    local param
+    while [[ $# -gt 0 ]]; do
+        param="$1"
+        shift
+        case $param in
+            -h | --help)
+                script_usage
+                exit 0
+                ;;
+            -d | --dist)
+                get_distance "$@"
+                exit 0
+                ;;
+            -l | --log)
+                create_log "$@"
+                exit 0
+                ;;
+            -r | --run)
+                run_bellman_ford "$@"
+                exit 0
+                ;;
+            *)
+                script_exit "Invalid parameter was provided: $param" 1
+                ;;
+        esac
+    done
+}
+
+main() {
+    if [[ $# -eq 0 ]]; then
+        script_usage
+        exit 0
+    else
+        parse_params "$@"
+    fi
+}
+
+main "$@"

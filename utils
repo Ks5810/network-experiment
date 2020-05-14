@@ -1,0 +1,58 @@
+#!/bin/bash
+
+# Print a centered text
+### @params $1: Text to be centered - default none
+### @params $2: Character to surround - default `-`
+### @params $3: Width - default 40
+center() {
+    if [ -n "$2" ]; then
+        local padding
+        padding="$(printf '%0.1s' "${1:--}"{1..500})"
+        printf '%*.*s %s %*.*s\n' 0 \
+            "$(((${3:-40} - 2 - ${#2}) / 2))" "$padding" "$2" 0 \
+            "$(((${3:-40} - 1 - ${#2}) / 2))" "$padding"
+    else
+        printf '%0.1s' "${1:--}"{1..40}
+        echo
+    fi
+}
+
+space_between() {
+    string1=${1:-none}
+    string2=${2:-none}
+    length=${3:-40}
+    limit=${4:-60}
+    local padding
+    padding=$(printf '%*s' "$limit")
+    padding=${padding// / }
+    printf '%s' "$string1"
+    printf '%*.*s' 0 $((length - ${#string1} - ${#string2})) "$padding"
+    printf '%s\n' "$string2"
+}
+
+# DESC: Pretty print the provided string
+# ARGS: $1 (required): Message to print (defaults to a green foreground)
+#       $2 (optional): Colour to print the message with. This can be an ANSI
+#                      escape code or one of the prepopulated colour variables.
+#       $3 (optional): Set to any value to not append a new line to the message
+# OUTS: None
+function pretty_print() {
+    if [[ $# -lt 1 ]]; then
+        script_exit 'Missing required argument to pretty_print()!' 2
+    fi
+
+    if [[ -z ${no_colour-} ]]; then
+        if [[ -n ${2-} ]]; then
+            printf '%b' "$2"
+        else
+            printf '%b' "$fg_green"
+        fi
+    fi
+
+    # Print message & reset text attributes
+    if [[ -n ${3-} ]]; then
+        printf '%s%b' "$1" "$ta_none"
+    else
+        printf '%s%b\n' "$1" "$ta_none"
+    fi
+}

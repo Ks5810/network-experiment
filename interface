@@ -1,9 +1,12 @@
-#!/bin/bash
+#!/bin/bash -
+#title           : interface
+#description     : Interface to run Bellman Ford on a router
+#author		     : Keisuke Suzuki
+#date			 : 5/13/20
+#usage		     : ./interface
+#notes           : Not completed yet
+#==============================================================================
 
-set -o errexit          # Exit on most errors (see the manual)
-set -o errtrace         # Make sure any error trap is inherited
-set -o nounset          # Disallow expansion of unset variables
-set -o pipefail         # Use last non-zero exit code in a pipeline
 source shell_utils
 
 # Usage help
@@ -17,7 +20,12 @@ Usage:
 EOF
 }
 
+# Run mtr to given destination
+# @params:
+##    $1: Name of destination node (b-ford)
 create_log() {
+    # TODO: Check if running local if so tell that
+    options='--report --no-dns'
     if [[ $# -gt 1 ]]; then
         echo "Invalid number of parameters"
         script_usage
@@ -28,19 +36,19 @@ create_log() {
                 echo "Already in the root"
                 ;;
             "cerf")
-                mtr 10.10.1.1 --report --no-dns
+                mtr 10.10.1.1 "$options"
                 ;;
             "knuth")
-                mtr 10.10.8.2 --report --no-dns
+                mtr 10.10.8.2 "$options"
                 ;;
             "lovelace")
-                mtr 10.10.4.1 --report --no-dns
+                mtr 10.10.4.1 "$options"
                 ;;
             "hopper")
-                mtr 10.10.3.1 --report --no-dns
+                mtr 10.10.3.1 "$options"
                 ;;
             "baran")
-                mtr 10.10.5.2 --report --no-dns
+                mtr 10.10.5.2 "$options"
                 ;;
         esac
     fi
@@ -48,27 +56,34 @@ create_log() {
 
 # Run bellman ford
 run_bellman_ford() {
+    ## TODO: Maybe set node to run to pass from here?
     if [[ $# -gt 1 ]]; then
-        echo "Invalid number of parameters"
+        echo "Please run with one argument"
         script_usage
         exit 0
     else
-        echo "in run_bellman_ford"
-        ./bellman_ford "$@"
+        # Build program if it has not been built yet
+        mkdir -p build
+        if [  ! -f "build/network" ]; then
+            cd build && cmake .. && make && cd ..
+        fi
+
+        ## execute and log the results
+        echo -e '\nRunning the Algorithm ...\n'
+        ./build/network input.csv
     fi
 }
 
-# Get distance from given ssh shell and store it as a glob variable
+# Get distance and redirect the output
 get_distance() {
-    ## TODO:
-    ### Run a subshell and get distance
+    ## TODO: Run ssh and get distance from each node
 
     if [[ $# -gt 1 ]]; then
-        echo "Invalid number of parameters"
+        echo "Please run with one argument"
         script_usage
         exit 0
     else
-        echo "in get_distance"
+        echo "In get_distance"
     fi
 }
 
@@ -102,6 +117,7 @@ parse_params() {
     done
 }
 
+# Show usage if no arguments are provided, otherwise, parse parameters
 main() {
     if [[ $# -eq 0 ]]; then
         script_usage

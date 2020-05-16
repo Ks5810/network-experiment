@@ -7,7 +7,8 @@
 #notes           : Not completed yet
 #==============================================================================
 
-source shell_utils
+source utils
+[ -n .env ] && source .env
 
 # Usage help
 script_usage() {
@@ -24,8 +25,7 @@ EOF
 # @params:
 ##    $1: Name of destination node (b-ford)
 create_log() {
-    # TODO: Check if running local if so tell that
-    options='--report --no-dns'
+    options="--report --no-dns"
     if [[ $# -gt 1 ]]; then
         echo "Invalid number of parameters"
         script_usage
@@ -56,7 +56,6 @@ create_log() {
 
 # Run bellman ford
 run_bellman_ford() {
-    ## TODO: Maybe set node to run to pass from here?
     if [[ $# -gt 1 ]]; then
         echo "Please run with one argument"
         script_usage
@@ -64,27 +63,48 @@ run_bellman_ford() {
     else
         # Build program if it has not been built yet
         mkdir -p build
-        if [  ! -f "build/network" ]; then
+        if [ ! -f "build/network" ]; then
             cd build && cmake .. && make && cd ..
         fi
 
         ## execute and log the results
         echo -e '\nRunning the Algorithm ...\n'
-        ./build/network input.csv
+        ./build/network "${1:input-files/edges.csv}"
     fi
 }
 
 # Get distance and redirect the output
 get_distance() {
-    ## TODO: Run ssh and get distance from each node
-
-    if [[ $# -gt 1 ]]; then
-        echo "Please run with one argument"
-        script_usage
-        exit 0
-    else
-        echo "In get_distance"
-    fi
+    echo "Getting distance"
+    ssh -p 27211 $host_addr \
+        -t "echo -e 'bf-lovelace:' &&
+            ping -c 25 10.10.4.1 | tail -1 | awk '{print $4}' | cut -d '/' -f 5 &&
+            echo -e 'bf-baran:' &&
+            ping -c 25 10.10.5.2 | tail -1 | awk '{print $4}' | cut -d '/' -f 5"
+    # knuth
+    echo "At knuth"
+    ssh -p 27214 $host_addr \
+        -t "echo -e 'knuth-hopper:' &&
+            ping -c 25 10.10.6.1 | tail -1 | awk '{print $4}' | cut -d '/' -f 5 &&
+            echo -e 'knuth-cerf:' &&
+            ping -c 25 10.10.7.2 | tail -1 | awk '{print $4}' | cut -d '/' -f 5"
+    # lovelace
+    echo "At lovelace"
+    ssh -p 27215 $host_addr \
+        -t "echo -e 'lovelace-knuth:' &&
+            ping -c 25 10.10.8.2 | tail -1 | awk '{print $4}' | cut -d '/' -f 5 &&
+            echo -e 'lovelace-hopper:' &&
+            ping -c 25 10.10.3.1 | tail -1 | awk '{print $4}' | cut -d '/' -f 5"
+    # baran
+    echo "At baran"
+    ssh -p 27210 $host_addr \
+        -t "echo -e 'baran-cerf:' &&
+            ping -c 25 10.10.1.1 | tail -1 | awk '{print $4}' | cut -d '/' -f 5"
+    # cerf
+    echo "At cerf"
+    ssh -p 27212 $host_addr \
+        -t "echo -e 'cerf-hopper:' &&
+            ping -c 25 10.10.2.1 | tail -1 | awk '{print $4}' | cut -d '/' -f 5"
 }
 
 # Parameter parser
@@ -99,7 +119,7 @@ parse_params() {
                 exit 0
                 ;;
             -d | --dist)
-                get_distance "$@"
+                get_distance > distances.txt
                 exit 0
                 ;;
             -l | --log)

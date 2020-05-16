@@ -1,0 +1,20 @@
+bf-lovelace:
+112.482
+bf-baran:
+101.482
+At knuth
+knuth-hopper:
+157.468
+knuth-cerf:
+16.444
+At lovelace
+lovelace-knuth:
+88.454
+lovelace-hopper:
+82.459
+At baran
+baran-cerf:
+103.444
+At cerf
+cerf-hopper:
+68.465

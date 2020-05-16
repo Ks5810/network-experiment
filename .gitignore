@@ -3,3 +3,4 @@ build
 cmake-build-debug
 bellman_ford
 bf-log.txt
+.env

@@ -1,0 +1,26 @@
+Getting shortest path...
+to cerf:
+Start: 2020-05-16T06:24:40-0500
+HOST: bellman-ford.ks5810-qv71825 Loss%   Snt   Last   Avg  Best  Wrst StDev
+  1.|-- 10.10.5.2                  0.0%    10  101.6 101.6 101.5 101.6   0.0
+  2.|-- 10.10.1.1                  0.0%    10  205.0 205.0 204.8 205.1   0.1
+To knuth:
+Start: 2020-05-16T06:24:54-0500
+HOST: bellman-ford.ks5810-qv71825 Loss%   Snt   Last   Avg  Best  Wrst StDev
+  1.|-- 10.10.4.1                  0.0%    10  112.5 112.5 112.4 112.6   0.1
+  2.|-- 10.10.8.2                  0.0%    10  201.0 201.0 200.8 201.1   0.1
+To lovelace:
+Start: 2020-05-16T06:25:08-0500
+HOST: bellman-ford.ks5810-qv71825 Loss%   Snt   Last   Avg  Best  Wrst StDev
+  1.|-- 10.10.4.1                  0.0%    10  113.0 112.6 112.5 113.0   0.1
+To hopper:
+Start: 2020-05-16T06:25:23-0500
+HOST: bellman-ford.ks5810-qv71825 Loss%   Snt   Last   Avg  Best  Wrst StDev
+  1.|-- 10.10.4.1                  0.0%    10  112.5 112.5 112.4 112.6   0.1
+  2.|-- 10.10.3.1                  0.0%    10  194.9 194.9 194.8 195.1   0.1
+To baran:
+Start: 2020-05-16T06:25:37-0500
+HOST: bellman-ford.ks5810-qv71825 Loss%   Snt   Last   Avg  Best  Wrst StDev
+  1.|-- 10.10.5.2                  0.0%    10  101.6 101.5 101.5 101.6   0.1
+Connection to c220g1-030619.wisc.cloudlab.us closed.
+

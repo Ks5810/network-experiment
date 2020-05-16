@@ -4,7 +4,6 @@ Author          : Keisuke Suzuki
 Created on      : 5/14/20
 Modification    :
 *******************************************************************************/
-#include <iomanip>
 #include "iostream"
 
 #include "graph.h"
@@ -20,6 +19,7 @@ int main( int argc, char *argv[] )
     }
     else
     {
+        cout << argv[1] << endl;
         ifstream file1(argv[1]);
         Graph graph1(file1);
         
@@ -28,8 +28,6 @@ int main( int argc, char *argv[] )
         graph1.bellmanFord(source);
         
         file1.close();
-        
-        
     }
     
     return 0;

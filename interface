@@ -36,20 +36,22 @@ create_log() {
                 echo "Already in the root"
                 ;;
             "cerf")
-                mtr 10.10.1.1 "$options"
+                mtr 10.10.1.1 --report --no-dns
                 ;;
             "knuth")
-                mtr 10.10.8.2 "$options"
+                mtr 10.10.8.2 --report --no-dns
                 ;;
             "lovelace")
-                mtr 10.10.4.1 "$options"
+                mtr 10.10.4.1 --report --no-dns
                 ;;
             "hopper")
-                mtr 10.10.3.1 "$options"
+                mtr 10.10.3.1 --report --no-dns
                 ;;
             "baran")
-                mtr 10.10.5.2 "$options"
+                mtr 10.10.5.2 --report --no-dns
                 ;;
+            *)
+                echo "$1 is not valid"
         esac
     fi
 }

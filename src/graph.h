@@ -1,5 +1,5 @@
 /*******************************************************************************
-Title           : bellman_ford.h
+Title           : graph.h
 Author          : Keisuke Suzuki
 Created on      : 5/14/20
 Modification    :
@@ -25,11 +25,13 @@ class Graph
     public:
     Graph();
     explicit Graph(ifstream &file);
+    int getNumEdges();
     void clear();
     void bellmanFord(string &source) const;
     
     private:
     GraphType adj_list;
+    int num_edges = 0;
 };
 
 #endif //NETWORK_GRAPH_H_

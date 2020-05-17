@@ -121,7 +121,7 @@ parse_params() {
                 exit 0
                 ;;
             -d | --dist)
-                get_distance > distances.txt
+                get_distance "$@" | cat > distances.txt
                 exit 0
                 ;;
             -l | --log)

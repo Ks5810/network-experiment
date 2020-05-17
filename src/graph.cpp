@@ -1,5 +1,5 @@
 /*******************************************************************************
-Title           : bellman_ford.cpp
+Title           : graph.cpp
 Author          : Keisuke Suzuki
 Created on      : 5/14/20
 Modification    :
@@ -20,7 +20,14 @@ Graph::Graph(ifstream &file) : adj_list(GraphType())
         v2 = row[1];
         v3 = row[2].empty() ? 0 : stoi(row[2]);
         adj_list[v1].push_back(make_pair(v2, v3));
+        ++num_edges;
     }
+    --num_edges;
+}
+
+int Graph::getNumEdges()
+{
+    return num_edges;
 }
 
 void Graph::clear()
@@ -65,11 +72,27 @@ void Graph::bellmanFord(string &source) const
             }
         }
     }
-    for(auto &vertices: adj_list)
+    
+    // Print output
+    int width = 54;
+    
+    cout << "\n";
+    utils::printCentered("Bellman Ford", width);
+    utils::printWithSpaceBetween("Vertices:", adj_list.size(), width);
+    utils::printWithSpaceBetween("Edges:", num_edges, width);
+    utils::printCentered("", width);
+    
+    for(auto const &vertices: adj_list)
     {
-        cout << vertices.first << ":" << setw(30) << "\t\t"
-             << distances[vertices.first] << endl;
+        utils::printWithSpaceBetween(
+            vertices.first,
+            distances[vertices.first],
+            width
+        );
     }
+    utils::printCentered("", width);
+    
 }
+
 
 

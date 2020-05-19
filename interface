@@ -14,10 +14,14 @@ source utils
 script_usage() {
     cat << EOF
 Usage:
-     -h|--help                 Displays this help
-     -d|--dist   <node-name>   Get distance from current node to <node-name>
-     -r|--run    <node-name>   Run Bellman Ford from <node-name>
-     -l|--log    <node-name>   log mtr result one <node-name>
+     -h|--help
+        Displays this help
+     -d|--dist   <node-name>
+        Get distance from current node to <node-name>
+     -r|--run    <node-name> <source-name>
+        Run Bellman Ford from <node-name>
+     -l|--log    <node-name>
+        log mtr result one <node-name>
 EOF
 }
 
@@ -25,7 +29,6 @@ EOF
 # @params:
 ##    $1: Name of destination node (b-ford)
 create_log() {
-    options='--report --no-dns'
     if [[ $# -gt 1 ]]; then
         echo "Invalid number of parameters"
         script_usage
@@ -58,8 +61,8 @@ create_log() {
 
 # Run bellman ford
 run_bellman_ford() {
-    if [[ $# -gt 1 ]]; then
-        echo "Please run with one argument"
+    if [[ $# -gt 2 ]]; then
+        echo "Please run with one or two arguments"
         script_usage
         exit 0
     else
@@ -70,8 +73,8 @@ run_bellman_ford() {
         fi
 
         ## execute and log the results
-        echo -e '\nRunning the Algorithm ...\n'
-        ./build/network "${1:input-files/edges.csv}"
+        echo -e '\nRunning the Algorithm ...'
+        ./build/network "$@"
     fi
 }
 

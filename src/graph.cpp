@@ -50,21 +50,21 @@ bool Graph::bellmanFord(string &source) const
     unordered_map<string, int> distances;
     bool negative_cycles = false;
     
-    auto DetectNegativeCycles = [&](auto v, auto u, auto w)
+    auto detectNegativeCycles = [&](auto v, auto u, auto w)
     {
         if(distances[v] <= utils::add(distances[u], w))
         {
             negative_cycles = true;
         }
     };
-    auto CompareNSetDistance = [&](auto v, auto u, auto w)
+    auto compareNSetDistance = [&](auto v, auto u, auto w)
     {
         if(utils::add(distances[u], w) < distances[v])
         {
             distances[v] = distances[u] + w;
         }
     };
-    auto IterateAdjList = ([&](auto func)
+    auto iterateAdjList = ([&](auto func)
     {
         for(auto &vertices: adj_list)
         {
@@ -92,13 +92,13 @@ bool Graph::bellmanFord(string &source) const
     // Iterate through all edges and vertices V - 1 times
     for(int i = 0; i < V - 1; ++i)
     {
-        IterateAdjList(CompareNSetDistance);
+        iterateAdjList(compareNSetDistance);
     }
     
     // Detect negative cycles
     if(has_negative_edges)
     {
-        IterateAdjList(DetectNegativeCycles);
+        iterateAdjList(detectNegativeCycles);
     }
     
     // Print output

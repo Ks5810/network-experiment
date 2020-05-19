@@ -26,12 +26,14 @@ class Graph
     Graph();
     explicit Graph(ifstream &file);
     int getNumEdges();
+    bool hasNegativeEdges();
     void clear();
-    void bellmanFord(string &source) const;
+    bool bellmanFord(string &source) const;
     
     private:
-    GraphType adj_list;
+    GraphType adj_list = GraphType();
     int num_edges = 0;
+    bool has_negative_edges = false;
 };
 
 #endif //NETWORK_GRAPH_H_

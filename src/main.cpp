@@ -13,6 +13,7 @@ using namespace std;
 
 int main( int argc, char *argv[] )
 {
+    int return_value = 0;
     if(argc != 2)
     {
         cout << "Usage:\t" << argv[0] << " <filename>\n";
@@ -24,11 +25,11 @@ int main( int argc, char *argv[] )
         Graph graph1(file1);
         
         // Run bellman Ford
-        string source = "b-ford";
-        graph1.bellmanFord(source);
+        string source = "S";
+        return_value = graph1.bellmanFord(source);
         
         file1.close();
     }
     
-    return 0;
+    return return_value;
 }
